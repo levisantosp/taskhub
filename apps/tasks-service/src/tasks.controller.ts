@@ -10,8 +10,7 @@ export class TasksController {
 
     @Post()
     public async create(@Body() createTask: CreateTask) {
-        // TODO: get user id from jwt
-        return this.task.create(createTask, 'temp-id')
+        return await this.task.create(createTask, createTask.createdBy)
     }
 
     @Get()
@@ -19,39 +18,41 @@ export class TasksController {
         @Query('page') page = 1,
         @Query('size') size = 10
     ) {
-        return this.task.findAll(page, size)
+        return await this.task.findAll(page, size)
     }
 
     @Get(':id')
-    public async findUnique(@Param() id: string) {
-        return this.task.findUnique(id)
+    public async findUnique(@Body() id: string) {
+        return await this.task.findUnique(id)
     }
 
     @Put(':id')
     public async update(
-        @Param() id: string,
+        @Param() { id }: { id: string },
         @Body() updateTask: UpdateTask
     ) {
-        // TODO: get user id from jwt
-        return this.task.update(id, updateTask, 'temp-id')
+        return await this.task.update(id, updateTask, updateTask.changedBy)
     }
 
     @Delete(':id')
-    public async delete(@Param() id: string) {
-        return this.task.delete(id)
+    public async delete(@Param() { id }: { id: string }) {
+        return await this.task.delete(id)
     }
 
-    @Post(':id/comments')
-    async addComment(@Body() createCommentDto: CreateComment) {
-        return this.task.createComment(createCommentDto)
+    @Post(':taskId/comments')
+    public async createComment(
+        @Param('taskId') taskId: string,
+        @Body() createComment: CreateComment
+    ) {
+        return await this.task.createComment(taskId, createComment)
     }
 
     @Get(':id/comments')
-    async findComments(
+    public async findComments(
         @Param('id') taskId: string,
         @Query('page') page: number = 1,
         @Query('size') size: number = 10
     ) {
-        return this.task.findComments(taskId, page, size)
+        return await this.task.findComments(taskId, page, size)
     }
 }
