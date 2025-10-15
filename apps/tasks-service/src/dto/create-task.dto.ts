@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsArray, IsDateString } from 'class-validator'
+import { IsString, IsOptional, IsEnum, IsArray, IsDateString, IsUUID } from 'class-validator'
 
 export class CreateTask {
     @IsString()
@@ -18,4 +18,7 @@ export class CreateTask {
     @IsArray()
     @IsOptional()
     public assignedUserIds?: string[]
+
+    @IsUUID()
+    public createdBy!: string
 }
