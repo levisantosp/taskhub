@@ -4,23 +4,19 @@ import { ValidationPipe } from '@nestjs/common'
 import { info } from '@taskhub/utils'
 import 'reflect-metadata'
 
-const bootstrap = async() => {
-    const app = await NestFactory.create(AuthModule)
+const app = await NestFactory.create(AuthModule)
 
-    app.useGlobalPipes(
-        new ValidationPipe({
-            whitelist: true,
-            forbidNonWhitelisted: true,
-            transform: true
-        })
-    )
-        .enableCors()
-    
-    const port = process.env.PORT || 3002
-    
-    await app.listen(port)
+app.useGlobalPipes(
+    new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true
+    })
+)
+    .enableCors()
 
-    info(`auth service running at ${port}`)
-}
+const port = process.env.PORT || 3002
 
-bootstrap()
+await app.listen(port)
+
+info(`auth service running at ${port}`)
