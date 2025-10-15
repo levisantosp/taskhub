@@ -2,22 +2,13 @@ FROM oven/bun:1-alpine
 
 WORKDIR /app
 
-FROM base AS install
-
-RUN mkdir -p /temp/dev
-
-COPY package.json bun.lock /temp/dev/
-COPY apps/auth-service/package.json /temp/dev/apps/auth-service/
-COPY packages/types/package.json /temp/dev/packages/types/
-COPY packages/utils/package.json /temp/dev/packages/utils/
-
-RUN cd /temp/dev && bun i --frozen-lockfile
-
-FROM base AS release
-
-COPY --from=install /temp/dev/node_modules node_modules
+COPY package.json bun.lock /app/
+COPY apps/auth-service/package.json bun.lock /app/apps/auth-service/
+COPY packages/types/package.json /app/packages/types/
+COPY packages/utils/package.json /app/packages/utils/
 COPY . .
 
+RUN bun i --frozen-lockfile
 RUN bun run build
 
 WORKDIR /app/apps/auth-service
