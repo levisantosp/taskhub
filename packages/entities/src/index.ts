@@ -1,0 +1,5 @@
+export * from './comment.entity.ts'
+export * from './history.entity.ts'
+export * from './task.entity.ts'
+export * from './user.entity.ts'
+export * from './base-user.entity.ts'

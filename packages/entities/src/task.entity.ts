@@ -4,13 +4,9 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToMany,
     ManyToOne,
     OneToMany
 } from 'typeorm'
-import { User } from './user.entity.ts'
-import { Comment } from './comment.entity.ts'
-import { TaskHistory } from './history.entity.ts'
 
 @Entity('tasks')
 export class Task {
@@ -40,17 +36,17 @@ export class Task {
     })
     public status: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE' = 'TODO'
 
-    @ManyToMany(() => User, user => user.assignedTasks)
-    public assignedUsers!: User[]
+    @Column('simple-array')
+    public assignedUsersId!: string[]
 
-    @ManyToOne(() => User, user => user.createdTasks)
-    public createdBy!: any
+    @Column('uuid')
+    public createdBy!: string
 
-    @OneToMany(() => Comment, comment => comment.task)
-    public comments!: Comment[]
+    @OneToMany('Comment', 'task')
+    public comments!: any[]
 
-    @OneToMany(() => TaskHistory, history => history.task)
-    public history!: TaskHistory[]
+    @OneToMany('TaskHistory', 'task', { cascade: true })
+    public history!: any[]
 
     @CreateDateColumn()
     public createdAt!: Date
