@@ -5,8 +5,5 @@ export class CreateComment {
     public content!: string
 
     @IsUUID()
-    public taskId!: string
-
-    @IsUUID()
     public authorId!: string
 }
