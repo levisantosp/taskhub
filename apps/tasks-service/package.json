@@ -1,0 +1,29 @@
+{
+    "name": "@taskhub/tasks-service",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "start": "bun src/index.ts",
+        "dev": "bun --watch src/index.ts"
+    },
+    "dependencies": {
+        "@nestjs/common": "^11.1.6",
+        "@nestjs/core": "^11.1.6",
+        "@nestjs/mapped-types": "^2.1.0",
+        "@nestjs/microservices": "^11.1.6",
+        "@nestjs/platform-express": "^11.1.6",
+        "@nestjs/typeorm": "^11.0.0",
+        "@taskhub/utils": "1.0.0",
+        "amqplib": "^0.10.9",
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.14.2",
+        "pg": "^8.16.3",
+        "reflect-metadata": "^0.2.2",
+        "typeorm": "^0.3.27"
+    },
+    "devDependencies": {
+        "@nestjs/cli": "^11.0.10",
+        "typescript": "^5.9.3"
+    }
+}
