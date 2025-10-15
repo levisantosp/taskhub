@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:17
+    container_name: taskhub-db
+    ports:
+      - '5432:5432'
+    networks:
+      - taskhub-network
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: taskhub
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: taskhub-rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - taskhub-network
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+
+networks:
+  taskhub-network:
+    driver: bridge

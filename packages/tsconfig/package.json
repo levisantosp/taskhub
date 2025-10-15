@@ -1,0 +1,9 @@
+{
+    "name": "@taskhub/tsconfig",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "./base.json",
+    "files": [
+        "./base.json"
+    ]
+}
