@@ -11,10 +11,10 @@ export class Comment {
     public content!: string
 
     @ManyToOne(() => Task, task => task.comments)
-    public task!: Task
+    public task!: any
 
     @ManyToOne(() => User)
-    public author!: User
+    public author!: any
 
     @CreateDateColumn()
     public createdAt!: Date

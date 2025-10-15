@@ -17,10 +17,10 @@ export class TaskHistory {
     public newValue!: string
 
     @ManyToOne(() => Task, task => task.history)
-    public task!: Task
+    public task!: any
 
     @ManyToOne(() => User)
-    public changedBy!: User
+    public changedBy!: any
 
     @CreateDateColumn()
     public changedAt!: Date

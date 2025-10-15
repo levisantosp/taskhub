@@ -44,7 +44,7 @@ export class Task {
     public assignedUsers!: User[]
 
     @ManyToOne(() => User, user => user.createdTasks)
-    public createdBy!: User
+    public createdBy!: any
 
     @OneToMany(() => Comment, comment => comment.task)
     public comments!: Comment[]
