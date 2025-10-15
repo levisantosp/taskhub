@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core'
 import { AuthModule } from './auth.module.ts'
 import { ValidationPipe } from '@nestjs/common'
 import { info } from '@taskhub/utils'
-import 'reflect-metadata'
 
 const app = await NestFactory.create(AuthModule)
 
