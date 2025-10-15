@@ -1,13 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, In } from 'typeorm'
-import { Task } from './entities/task.entity.ts'
-import { User } from './entities/user.entity.ts'
-import { Comment } from './entities/comment.entity.ts'
-import { TaskHistory } from './entities/history.entity.ts'
 import { CreateTask } from './dto/create-task.dto.ts'
 import { UpdateTask } from './dto/update-task.dto.ts'
 import { CreateComment } from './dto/create-comment.dto.ts'
+import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 
 @Injectable()
 export class TasksService {
@@ -31,18 +28,10 @@ export class TasksService {
             throw new NotFoundException('User not found')
         }
 
-        const assignedUsers = createTask.assignedUserIds ?
-            await this.user.find({
-                where: {
-                    id: In(createTask.assignedUserIds)
-                }
-            }) :
-            []
-
         const task = this.task.create({
             ...createTask,
-            createdBy: author,
-            assignedUsers
+            createdBy: author.id,
+            assignedUsersId: createTask.assignedUserIds
         })
 
         await this.task.save(task)
@@ -54,7 +43,6 @@ export class TasksService {
 
     public async findAll(page = 1, size = 10) {
         const [tasks, total] = await this.task.findAndCount({
-            relations: ['createdBy', 'assignedUsers', 'comments'],
             skip: (page - 1) * size,
             take: size,
             order: {
@@ -74,17 +62,7 @@ export class TasksService {
     }
 
     async findUnique(id: string) {
-        const task = await this.task.findOne({
-            where: { id },
-            relations: [
-                'createdBy',
-                'assignedUsers',
-                'comments',
-                'comments.author',
-                'history',
-                'history.changedBy'
-            ]
-        })
+        const task = await this.task.findOne({ where: { id } })
 
         if(!task) {
             throw new NotFoundException('Task not found')
@@ -98,11 +76,12 @@ export class TasksService {
             where: { id }
         })
 
-        const author = await this.user.findOneBy({ id })
+        const author = await this.user.findOneBy({ id: changedBy })
 
         if(!task) {
             throw new NotFoundException('Task not found')
         }
+
         if(!author) {
             throw new NotFoundException('Author not found')
         }
@@ -112,11 +91,9 @@ export class TasksService {
         Object.assign(task, updateTask)
 
         if(updateTask.assignedUserIds) {
-            task.assignedUsers = await this.user.find({
-                where: {
-                    id: In(updateTask.assignedUserIds)
-                }
-            })
+            const users = await this.user.findBy({ id: In(updateTask.assignedUserIds) })
+            
+            task.assignedUsersId = users.map(u => u.id)
         }
 
         await this.task.save(task)
@@ -129,13 +106,14 @@ export class TasksService {
     public async delete(id: string) {
         const task = await this.findUnique(id)
 
+        await this.history.delete({ task: { id } })
         await this.task.remove(task)
 
         return { message: 'Task deleted successfully' }
     }
 
-    public async createComment(createComment: CreateComment) {
-        const task = await this.task.findOneBy({ id: createComment.taskId })
+    public async createComment(taskId: string, createComment: CreateComment) {
+        const task = await this.task.findOneBy({ id: taskId })
 
         const author = await this.user.findOneBy({ id: createComment.authorId })
 
@@ -149,8 +127,8 @@ export class TasksService {
 
         const comment = this.comment.create({
             content: createComment.content,
-            task,
-            author
+            task: task.id,
+            author: author.id
         })
 
         await this.comment.save(comment)
@@ -163,11 +141,8 @@ export class TasksService {
     public async findComments(task: string, page = 1, size = 10) {
         const [comments, total] = await this.comment.findAndCount({
             where: {
-                task: {
-                    id: task
-                }
+                task
             },
-            relations: ['author'],
             order: {
                 createdAt: 'DESC'
             },

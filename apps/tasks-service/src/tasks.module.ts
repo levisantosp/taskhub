@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from './entities/user.entity.ts'
 import { TasksService } from './tasks.service.ts'
-import { Task } from './entities/task.entity.ts'
-import { Comment } from './entities/comment.entity.ts'
-import { TaskHistory } from './entities/history.entity.ts'
+import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 import { TasksController } from './tasks.controller.ts'
 
 @Module({
@@ -17,7 +14,7 @@ import { TasksController } from './tasks.controller.ts'
             password: process.env.DB_PASS || 'admin',
             database: process.env.DB_NAME || 'localhost',
             entities: [Task, User, Comment, TaskHistory],
-            synchronize: process.env.NODE_ENV !== 'production',
+            synchronize: true,
             logging: true
         }),
         TypeOrmModule.forFeature([Task, User, Comment, TaskHistory])
