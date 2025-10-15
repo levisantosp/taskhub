@@ -9,23 +9,23 @@ export class AuthController {
     public constructor(private readonly authService: AuthService) {}
 
     @Post('register')
-    async register(@Body() register: RegisterDto) {
-        return this.authService.register(register)
+    public async register(@Body() register: RegisterDto) {
+        return await this.authService.register(register)
     }
 
     @Post('login')
-    async login(@Body() login: LoginDto) {
-        return this.authService.login(login)
+    public async login(@Body() login: LoginDto) {
+        return await this.authService.login(login)
     }
 
     @Post('refresh')
-    async refresh(@Body() { refreshToken }: { refreshToken: string }) {
-        return this.authService.refreshToken(refreshToken)
+    public async refresh(@Body() { refreshToken }: { refreshToken: string }) {
+        return await this.authService.refreshToken(refreshToken)
     }
 
     @Get('profile')
     @UseGuards(AuthGuard('jwt'))
-    async getProfile(req: any) {
+    public getProfile(req: any) {
         return req.user
     }
 }

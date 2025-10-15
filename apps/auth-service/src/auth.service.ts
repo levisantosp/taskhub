@@ -38,7 +38,7 @@ export class AuthService {
 
         await this.user.save(user)
 
-        const tokens = await this.generateTokens(user)
+        const tokens = this.generateTokens(user)
 
         return {
             user: {
@@ -62,7 +62,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid email or password')
         }
 
-        const tokens = await this.generateTokens(user)
+        const tokens = this.generateTokens(user)
 
         return {
             user: {
@@ -99,7 +99,7 @@ export class AuthService {
         }
     }
 
-    private async generateTokens(user: BaseUser) {
+    private generateTokens(user: BaseUser) {
         const payload = {
             sub: user.id,
             email: user.email,
@@ -114,7 +114,7 @@ export class AuthService {
     }
 
     public async validateUser(payload: any) {
-        return this.user.findOne({
+        return await this.user.findOne({
             where: {
                 id: payload.id
             }
