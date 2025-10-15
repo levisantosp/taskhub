@@ -2,17 +2,17 @@ import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import * as utils from '@taskhub/utils'
-import { User } from './entities/user.entity.ts'
 import { RegisterDto } from './dto/register.dto.ts'
 import { LoginDto } from './dto/login.dto.ts'
 import AuthUtils from '@taskhub/utils/dist/auth.js'
+import { BaseUser } from '@taskhub/entities'
+import { error } from '@taskhub/utils'
 
 @Injectable()
 export class AuthService {
     public constructor(
-        @InjectRepository(User)
-        private user: Repository<User>,
+        @InjectRepository(BaseUser)
+        private user: Repository<BaseUser>,
         private jwtService: JwtService
     ) {}
 
@@ -92,12 +92,14 @@ export class AuthService {
             return this.generateTokens(user)
         }
 
-        catch {
+        catch(e) {
+            error(e as Error)
+
             throw new UnauthorizedException('Invalid refresh token')
         }
     }
 
-    private async generateTokens(user: User) {
+    private async generateTokens(user: BaseUser) {
         const payload = {
             sub: user.id,
             email: user.email,

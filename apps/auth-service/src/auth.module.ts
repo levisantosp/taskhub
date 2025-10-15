@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { JwtModule } from '@nestjs/jwt'
-import { User } from './entities/user.entity.ts'
 import { AuthService } from './auth.service.ts'
 import { AuthController } from './auth.controller.ts'
 import { LocalStrategy } from './strategies/local.strategy.ts'
 import { JwtStrategy } from './strategies/jwt.strategy.ts'
+import { BaseUser } from '@taskhub/entities'
 
 @Module({
     imports: [
@@ -16,11 +16,11 @@ import { JwtStrategy } from './strategies/jwt.strategy.ts'
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASS || 'admin',
             database: process.env.DB_NAME || 'localhost',
-            entities: [User],
-            synchronize: process.env.NODE_ENV !== 'production',
+            entities: [BaseUser],
+            synchronize: true,
             logging: true
         }),
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([BaseUser]),
         JwtModule.register({
             secret: process.env.JWT_SECRET || 'secret',
             signOptions: { expiresIn: '30m' }
