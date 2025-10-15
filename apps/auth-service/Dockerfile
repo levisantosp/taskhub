@@ -6,7 +6,7 @@ FROM base AS install
 
 RUN mkdir -p /temp/dev
 
-COPY package.json bun.lockb /temp/dev/
+COPY package.json bun.lock /temp/dev/
 COPY apps/auth-service/package.json /temp/dev/apps/auth-service/
 COPY packages/types/package.json /temp/dev/packages/types/
 COPY packages/utils/package.json /temp/dev/packages/utils/
