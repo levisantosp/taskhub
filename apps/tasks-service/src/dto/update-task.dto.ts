@@ -1,12 +1,11 @@
 import { PartialType } from '@nestjs/mapped-types'
 import { CreateTask } from './create-task.dto.ts'
-import { IsEnum } from 'class-validator'
-import { Column } from 'typeorm'
+import { IsEnum, IsUUID } from 'class-validator'
 
 export class UpdateTask extends PartialType(CreateTask) {
     @IsEnum(['TODO', 'IN_PROGRESS', 'REVIEW', 'DONE'])
-    public status!: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
+    public status?: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
 
-    @Column('uuid')
+    @IsUUID()
     public changedBy!: string
 }
