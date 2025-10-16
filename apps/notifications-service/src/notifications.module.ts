@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Notification, User } from '@taskhub/entities'
 import { NotificationsService } from './notifications.service.ts'
 import { NotificationsController } from './notifications.controller.ts'
+import { NotificationsGateway } from './ws/notifications.gateway.ts'
 
 @Module({
     imports: [
@@ -21,6 +22,6 @@ import { NotificationsController } from './notifications.controller.ts'
         TypeOrmModule.forFeature([Notification, User])
     ],
     controllers: [RabbitMqConsumer, NotificationsController],
-    providers: [NotificationsService]
+    providers: [NotificationsService, NotificationsGateway]
 })
 export class NotificationsModule {}
