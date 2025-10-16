@@ -73,6 +73,29 @@ services:
     networks:
       - taskhub-network
 
+  notifications-service:
+    container_name: notifications-service
+    build:
+      context: .
+      dockerfile: ./apps/notifications-service/Dockerfile
+    ports:
+      - '3004:3004'
+    volumes:
+      - .:/app
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/notifications-service/node_modules
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+    depends_on:
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - taskhub-network
+
 volumes:
   postgres_data:
     driver: local
