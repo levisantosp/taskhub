@@ -37,8 +37,40 @@ export type TaskEvent =
     | 'task.updated'
     | 'task.comment.created'
 
-export interface RabbitMQEvent {
-    type: TaskEvent
-    payload: any
-    timestamp: Date
+export interface TaskCreatedEvent {
+    type: 'task.created'
+    payload: {
+        id: string
+        title: string
+        description: string
+        createdBy: string
+        assignedUsers: string[]
+        createdAt: Date
+    }
 }
+
+export interface TaskUpdatedEvent {
+    type: 'task.updated'
+    payload: {
+        id: string
+        title: string
+        description: string
+        status: string
+        priority: string
+        updatedAt: Date
+        changedBy: string
+    }
+}
+
+export interface TaskCommentCreatedEvent {
+    type: 'task.comment.created'
+    payload: {
+        id: string
+        content: string
+        taskId: string
+        authorId: string
+        createdAt: Date
+    }
+}
+
+export type RabbitMQEvent = TaskCreatedEvent | TaskUpdatedEvent | TaskCommentCreatedEvent
