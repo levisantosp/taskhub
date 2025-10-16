@@ -22,7 +22,7 @@ export class TasksController {
     }
 
     @Get(':id')
-    public async findUnique(@Body() id: string) {
+    public async findUnique(@Param() { id }: { id: string }) {
         return await this.task.findUnique(id)
     }
 
