@@ -1,0 +1,31 @@
+{
+    "name": "@taskhub/notifications-service",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "dev": "bun --watch src/index.ts",
+        "start": "bun src/index.ts"
+    },
+    "dependencies": {
+        "@nestjs/common": "^11.1.6",
+        "@nestjs/core": "^11.1.6",
+        "@nestjs/microservices": "^11.1.6",
+        "@nestjs/platform-express": "^11.1.6",
+        "@nestjs/typeorm": "^11.0.0",
+        "@nestjs/websockets": "^11.1.6",
+        "amqp-connection-manager": "^5.0.0",
+        "amqplib": "^0.10.9",
+        "pg": "^8.16.3",
+        "reflect-metadata": "^0.2.2",
+        "rxjs": "^7.8.2",
+        "typeorm": "^0.3.27",
+        "@taskhub/types": "*",
+        "@taskhub/entities": "*",
+        "@taskhub/utils": "*"
+    },
+    "devDependencies": {
+        "@nestjs/cli": "^11.0.10",
+        "typescript": "^5.9.3"
+    }
+}
