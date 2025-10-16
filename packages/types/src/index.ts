@@ -73,4 +73,6 @@ export interface TaskCommentCreatedEvent {
     }
 }
 
-export type RabbitMQEvent = TaskCreatedEvent | TaskUpdatedEvent | TaskCommentCreatedEvent
+export type BaseRabbitMQEVent = TaskCreatedEvent | TaskUpdatedEvent | TaskCommentCreatedEvent
+
+export type RabbitMQEvent<T extends BaseRabbitMQEVent = BaseRabbitMQEVent> = T
