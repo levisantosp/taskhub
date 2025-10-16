@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { TasksService } from './tasks.service.ts'
 import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 import { TasksController } from './tasks.controller.ts'
+import { RabbitMqService } from './rabbitmq/rabbitmq.service.ts'
 
 @Module({
     imports: [
@@ -20,6 +21,6 @@ import { TasksController } from './tasks.controller.ts'
         TypeOrmModule.forFeature([Task, User, Comment, TaskHistory])
     ],
     controllers: [TasksController],
-    providers: [TasksService]
+    providers: [TasksService, RabbitMqService]
 })
 export class TasksModule {}

@@ -5,18 +5,24 @@ import { CreateTask } from './dto/create-task.dto.ts'
 import { UpdateTask } from './dto/update-task.dto.ts'
 import { CreateComment } from './dto/create-comment.dto.ts'
 import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
+import { RabbitMqService } from './rabbitmq/rabbitmq.service.ts'
 
 @Injectable()
 export class TasksService {
     public constructor(
         @InjectRepository(Task)
         private task: Repository<Task>,
+
         @InjectRepository(User)
         private user: Repository<User>,
+
         @InjectRepository(Comment)
         private comment: Repository<Comment>,
+
         @InjectRepository(TaskHistory)
-        private history: Repository<TaskHistory>
+        private history: Repository<TaskHistory>,
+
+        private rabbit: RabbitMqService
     ) {}
 
     public async create(createTask: CreateTask, id: string) {
@@ -35,6 +41,18 @@ export class TasksService {
         })
 
         await this.task.save(task)
+
+        await this.rabbit.publishEvent({
+            type: 'task.created',
+            payload: {
+                id: task.id,
+                title: task.title,
+                description: task.description,
+                createdBy: task.createdBy,
+                assignedUsers: task.assignedUsersId,
+                createdAt: task.createdAt
+            }
+        })
 
         await this.logHistory(task, author, 'CREATED', 'Task created')
 
@@ -91,12 +109,23 @@ export class TasksService {
         Object.assign(task, updateTask)
 
         if(updateTask.assignedUserIds) {
-            const users = await this.user.findBy({ id: In(updateTask.assignedUserIds) })
-            
-            task.assignedUsersId = users.map(u => u.id)
+            task.assignedUsersId = updateTask.assignedUserIds
         }
 
         await this.task.save(task)
+
+        await this.rabbit.publishEvent({
+            type: 'task.updated',
+            payload: {
+                id: task.id,
+                title: task.title,
+                description: task.description,
+                status: task.status,
+                priority: task.priority,
+                updatedAt: task.updatedAt,
+                changedBy: changedBy
+            }            
+        })
 
         await this.logChanges(task, old, author)
         
@@ -132,6 +161,17 @@ export class TasksService {
         })
 
         await this.comment.save(comment)
+
+        await this.rabbit.publishEvent({
+            type: 'task.comment.created',
+            payload: {
+                authorId: comment.author,
+                content: comment.content,
+                createdAt: comment.createdAt,
+                id: comment.id,
+                taskId: comment.task
+            }
+        })
 
         await this.logHistory(task, author, 'CREATE_COMMENT', `Comment created: ${createComment.content.substring(0, 50)}...`)
 
