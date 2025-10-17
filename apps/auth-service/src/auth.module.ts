@@ -6,6 +6,7 @@ import { AuthController } from './auth.controller.ts'
 import { LocalStrategy } from './strategies/local.strategy.ts'
 import { JwtStrategy } from './strategies/jwt.strategy.ts'
 import { BaseUser } from '@taskhub/entities'
+import { RabbitMqConsumer } from './rabbitmq.consumer.ts'
 
 @Module({
     imports: [
@@ -26,7 +27,7 @@ import { BaseUser } from '@taskhub/entities'
             signOptions: { expiresIn: '30m' }
         })
     ],
-    controllers: [AuthController],
+    controllers: [AuthController, RabbitMqConsumer],
     providers: [AuthService, LocalStrategy, JwtStrategy]
 })
 export class AuthModule {}

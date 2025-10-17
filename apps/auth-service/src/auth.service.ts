@@ -106,11 +106,11 @@ export class AuthService {
             username: user.username
         }
 
-        const acessToken = this.jwtService.sign(payload)
+        const accessToken = this.jwtService.sign(payload)
 
         const refreshToken = AuthUtils.generateToken(payload, process.env.JWT_REFRESH_SECRET || 'refreshSecret', '7d')
 
-        return { acessToken, refreshToken }
+        return { accessToken, refreshToken }
     }
 
     public async validateUser(payload: any) {
