@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, HttpStatus, Logger, Post } from '@nestjs/common'
+import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common'
 import { AuthClient } from './auth-client.ts'
 import { firstValueFrom } from 'rxjs'
 
@@ -9,7 +9,7 @@ export class AuthController {
     @Post('register')
     public async register(@Body() data: unknown) {
         try {
-            await firstValueFrom(this.client.send('register', data))
+            return await firstValueFrom(this.client.send('register', data))
         }
 
         catch(e) {
