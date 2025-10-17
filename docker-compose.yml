@@ -96,6 +96,29 @@ services:
     networks:
       - taskhub-network
 
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: ./apps/api-gateway/Dockerfile
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/app
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/api-gateway/node_modules
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    depends_on:
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - taskhub-network
+
 volumes:
   postgres_data:
     driver: local
