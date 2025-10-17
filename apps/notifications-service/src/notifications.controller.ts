@@ -11,8 +11,6 @@ export class NotificationsController {
         @Query('page') page = 1,
         @Query('size') size = 10
     ) {
-        console.log(userId)
-
         return await this.notification.getUserNotifications(userId, page, size)
     }
 
@@ -25,8 +23,6 @@ export class NotificationsController {
     public async markAsRead(
         @Param() { id }: { id: string }
     ) {
-        console.log(id)
-
         await this.notification.markAsRead(id)
 
         return { ok: true }
