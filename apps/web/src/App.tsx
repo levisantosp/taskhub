@@ -1,4 +1,3 @@
-// import './App.css'
 import { Outlet } from '@tanstack/react-router'
 import { AuthProvider } from './context/auth-context.tsx'
 
