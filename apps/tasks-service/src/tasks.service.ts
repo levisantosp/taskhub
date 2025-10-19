@@ -34,11 +34,7 @@ export class TasksService {
             throw new NotFoundException('User not found')
         }
 
-        const task = this.task.create({
-            ...createTask,
-            createdBy: author.id,
-            assignedUsersId: createTask.assignedUserIds
-        })
+        const task = this.task.create(createTask)
 
         await this.task.save(task)
 
