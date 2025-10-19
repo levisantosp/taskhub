@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Label } from './ui/label.tsx'
 import { Input } from './ui/input.tsx'
 import { Button } from './ui/button.tsx'
+import { useAuth } from '../context/auth-context.tsx'
 
 const registerSchema = z.object({
     email: z.email('Invalid email!'),
@@ -24,11 +25,11 @@ export function RegisterForm() {
         resolver: zodResolver(registerSchema)
     })
 
+    const auth = useAuth()
+
     const onSubmit = async(data: RegisterFormData) => {
-        console.log('register data:', data)
+        await auth.register(data.username, data.email, data.password)
     }
-    
-    console.log(form.formState.errors)
 
     return (
         <>
