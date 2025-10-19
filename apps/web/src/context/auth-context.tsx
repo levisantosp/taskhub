@@ -44,8 +44,6 @@ export function AuthProvider({ children }: Props) {
         if(token) {
             const payload = JSON.parse(atob(token.split('.')[1]))
 
-            console.log(payload)
-
             setUser({
                 id: payload.sub,
                 email: payload.email,

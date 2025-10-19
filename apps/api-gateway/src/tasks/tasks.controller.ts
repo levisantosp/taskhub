@@ -33,7 +33,6 @@ export class TasksController {
 
     @Post()
     public async createTask(@Body() data: unknown) {
-        console.log(data)
         try {
             return await firstValueFrom(this.task.send('create.task', data))
         }
