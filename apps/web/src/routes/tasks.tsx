@@ -26,7 +26,7 @@ export function TasksPage() {
     const handleCreateTask = async (data: CreateTaskFormData) => {
         setIsSubmitting(true)
 
-        const task = await taskService.createTask({
+        await taskService.createTask({
             task: {
                 ...data,
                 assignedUsersId: [auth.user?.id],
@@ -34,10 +34,6 @@ export function TasksPage() {
             },
             author: auth.user?.id
         })
-
-        console.log(auth.user?.id)
-
-        console.log(task)
 
         await findTasks()
 
