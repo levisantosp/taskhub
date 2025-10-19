@@ -4,6 +4,7 @@ import { TasksService } from './tasks.service.ts'
 import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 import { TasksController } from './tasks.controller.ts'
 import { RabbitMqService } from './rabbitmq/rabbitmq.service.ts'
+import { RabbitMQConsumer } from './rabbitmq/rabbitmq.consumer.ts'
 
 @Module({
     imports: [
@@ -20,7 +21,7 @@ import { RabbitMqService } from './rabbitmq/rabbitmq.service.ts'
         }),
         TypeOrmModule.forFeature([Task, User, Comment, TaskHistory])
     ],
-    controllers: [TasksController],
+    controllers: [TasksController, RabbitMQConsumer],
     providers: [TasksService, RabbitMqService]
 })
 export class TasksModule {}

@@ -4,7 +4,6 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToOne,
     OneToMany
 } from 'typeorm'
 
@@ -36,7 +35,10 @@ export class Task {
     })
     public status: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE' = 'TODO'
 
-    @Column('simple-array')
+    @Column({
+        type: 'jsonb',
+        default: []
+    })
     public assignedUsersId!: string[]
 
     @Column('uuid')

@@ -6,17 +6,40 @@ export interface User {
     updatedAt: Date
 }
 
+export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+
+export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
+
 export interface Task {
     id: string
     title: string
     description: string
     deadline: Date
-    priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+    priority: TaskPriority
     status: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
-    assignedUsers: User[]
+    assignedUsers: string[]
     createdBy: User
     createdAt: Date
     updatedAt: Date
+}
+
+export interface CreateTaskData {
+    title: string
+    description: string
+    deadline: string
+    priority: TaskPriority
+    assignedUsers: string[]
+}
+
+export interface CreateTaskFormData {
+    title: string
+    description?: string
+    deadline: string
+    priority: TaskPriority
+}
+
+export interface UpdateTaskData extends Partial<CreateTaskData> {
+    status?: TaskStatus
 }
 
 export interface Comment {
