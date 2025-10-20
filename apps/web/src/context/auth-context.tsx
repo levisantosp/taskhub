@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { apiClient } from '../lib/api.ts'
+import { ws } from '../services/ws.service.ts'
 
 type User = {
     id: string
@@ -76,6 +77,8 @@ export function AuthProvider({ children }: Props) {
 
             localStorage.setItem('accessToken', res.data.accessToken)
             localStorage.setItem('refreshToken', res.data.refreshToken)
+
+            ws.connect(res.data.accessToken)
         }
 
         catch(e) {
@@ -98,6 +101,7 @@ export function AuthProvider({ children }: Props) {
             localStorage.setItem('accessToken', response.data.accessToken)
             localStorage.setItem('refreshToken', response.data.refreshToken)
 
+            ws.connect(response.data.accessToken)
         }
         
         catch(e) {
@@ -111,6 +115,8 @@ export function AuthProvider({ children }: Props) {
         localStorage.removeItem('accessToken')
 
         navigate({ to: '/login' })
+
+        ws.disconnect()
     }
 
     const value = {
