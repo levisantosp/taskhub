@@ -1,5 +1,6 @@
 import { Outlet } from '@tanstack/react-router'
 import { AuthProvider } from './context/auth-context.tsx'
+import Notifications from './components/notifications.tsx'
 
 export default function App() {
     return (
@@ -9,6 +10,7 @@ export default function App() {
                     className='min-h-screen bg-background'
                 >
                     <Outlet />
+                    <Notifications />
                 </div>
             </AuthProvider>
         </>
