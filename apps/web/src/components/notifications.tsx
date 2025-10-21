@@ -1,19 +1,8 @@
-import { useEffect } from 'react'
 import useWebSocket from '../hooks/useWs.ts'
 import { Button } from './ui/button.tsx'
 
 export default function Notifications() {
     const ws = useWebSocket()
-
-    const token = localStorage.getItem('accessToken')
-
-    useEffect(() => {
-        if(token) {
-            console.log('connecting to websocket')
-
-            ws.connect(token)
-        }
-    }, [token, ws.connect])
 
     if(!ws.notifications.length) {
         return null
