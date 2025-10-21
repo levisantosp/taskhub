@@ -44,11 +44,6 @@ services:
       dockerfile: ./apps/auth-service/Dockerfile
     ports:
       - '3002:3002'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/auth-service/node_modules
     environment:
       - NODE_ENV=production
       - PORT=3002
@@ -67,11 +62,6 @@ services:
       dockerfile: ./apps/tasks-service/Dockerfile
     ports:
       - '3003:3003'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/tasks-service/node_modules
     environment:
       - NODE_ENV=production
       - PORT=3003
@@ -90,11 +80,6 @@ services:
       dockerfile: ./apps/notifications-service/Dockerfile
     ports:
       - '3004:3004'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/notifications-service/node_modules
     environment:
       - NODE_ENV=production
       - PORT=3004
@@ -113,11 +98,6 @@ services:
       dockerfile: ./apps/api-gateway/Dockerfile
     ports:
       - '3001:3001'
-    volumes:
-      - .:/app
-      - ./packages:/app/packages
-      - /app/node_modules
-      - /app/apps/api-gateway/node_modules
     environment:
       - NODE_ENV=production
       - PORT=3001
