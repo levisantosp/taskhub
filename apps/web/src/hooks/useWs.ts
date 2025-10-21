@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { ws } from '../services/ws.service.ts'
 
 type Notification = {
     type: string
@@ -32,15 +31,9 @@ export default function useWebSocket() {
 
     const removeNotification = (index: number) => setNotifications(prev => prev.filter((_, i) => i !== index))
 
-    const connect = (token: string) => ws.connect(token)
-
-    const disconnect = () => ws.disconnect()
-
     return {
         notifications,
         clearNotifications,
-        removeNotification,
-        connect,
-        disconnect
+        removeNotification
     }
 }
