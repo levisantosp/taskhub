@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core'
-import { info } from '@taskhub/utils'
 import { AppModule } from './app.module.ts'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import { ValidationPipe } from '@nestjs/common'
+import { Logger, ValidationPipe } from '@nestjs/common'
 
 const app = await NestFactory.create(AppModule)
+
+const console = new Logger('API Gateway')
 
 app.useGlobalPipes(
     new ValidationPipe({
@@ -32,5 +33,5 @@ app.enableCors({
 
 await app.listen(port)
 
-info(`🚀 API Gateway running at http://localhost:${port}`)
-info(`📘 Swagger: http://localhost:${port}/docs`)
+console.log(`🚀 API Gateway running at http://localhost:${port}`)
+console.log(`📘 Swagger: http://localhost:${port}/docs`)

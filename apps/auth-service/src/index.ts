@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core'
 import { AuthModule } from './auth.module.ts'
-import { ValidationPipe } from '@nestjs/common'
-import { info } from '@taskhub/utils'
+import { Logger, ValidationPipe } from '@nestjs/common'
 import { Transport, type MicroserviceOptions } from '@nestjs/microservices'
 
 const app = await NestFactory.create(AuthModule)
+
+const console = new Logger('Auth Service')
 
 app.useGlobalPipes(
     new ValidationPipe({
@@ -32,4 +33,5 @@ const port = process.env.PORT || 3002
 await app.startAllMicroservices()
 await app.listen(port)
 
-info(`auth service running with rabbitmq at ${port}`)
+console.log(`🔒 Auth Service running at ${port}`)
+console.log(`🐰 RabbitMQ connected succesfully!`)
