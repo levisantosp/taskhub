@@ -7,9 +7,11 @@ export default class WebSocketService {
     
     public connect(token: string) {
         try {
-            this.socket = io('ws://localhost:3001/ws', {
+            this.socket = io('ws://localhost:3004', {
                 transports: ['websocket'],
-                auth: { token }
+                auth: {
+                    token: 'Bearer ' + token
+                }
             })
 
             this.socket.on('connect', () => {
