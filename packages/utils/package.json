@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "bun test.ts"
+    "test": "node test.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
