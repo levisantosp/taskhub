@@ -3,8 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { TasksService } from './tasks.service.ts'
 import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 import { TasksController } from './tasks.controller.ts'
-import { RabbitMqService } from './rabbitmq/rabbitmq.service.ts'
-import { RabbitMQConsumer } from './rabbitmq/rabbitmq.consumer.ts'
+import { ClientsModule, Transport } from '@nestjs/microservices'
 
 @Module({
     imports: [
@@ -19,9 +18,20 @@ import { RabbitMQConsumer } from './rabbitmq/rabbitmq.consumer.ts'
             synchronize: true,
             logging: true
         }),
-        TypeOrmModule.forFeature([Task, User, Comment, TaskHistory])
+        TypeOrmModule.forFeature([Task, User, Comment, TaskHistory]),
+        ClientsModule.register([
+            {
+                name: 'notifications:bus',
+                transport: Transport.RMQ,
+                options: {
+                    urls: [process.env.RABBITMQ_URL || 'amqp://admin:admin@localhost:5672'],
+                    queue: 'notifications.queue',
+                    queueOptions: { durable: true }
+                }
+            }
+        ])
     ],
-    controllers: [TasksController, RabbitMQConsumer],
-    providers: [TasksService, RabbitMqService]
+    controllers: [TasksController],
+    providers: [TasksService]
 })
 export class TasksModule {}
