@@ -2,8 +2,17 @@ import { NestFactory } from '@nestjs/core'
 import { info } from '@taskhub/utils'
 import { AppModule } from './app.module.ts'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { ValidationPipe } from '@nestjs/common'
 
 const app = await NestFactory.create(AppModule)
+
+app.useGlobalPipes(
+    new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true
+    })
+)
 
 const doc = new DocumentBuilder()
     .setTitle('TaskHub API')
@@ -12,7 +21,7 @@ const doc = new DocumentBuilder()
     .addBearerAuth()
     .build()
 
-SwaggerModule.setup('/api/docs', app, SwaggerModule.createDocument(app, doc))
+SwaggerModule.setup('/docs', app, SwaggerModule.createDocument(app, doc))
 
 const port = process.env.PORT || 3001
 
@@ -23,5 +32,5 @@ app.enableCors({
 
 await app.listen(port)
 
-info(`api gateway running at ${port}`)
-info(`swagger avaialble at http://localhost:${port}/api/docs`)
+info(`🚀 API Gateway running at http://localhost:${port}`)
+info(`📘 Swagger: http://localhost:${port}/docs`)

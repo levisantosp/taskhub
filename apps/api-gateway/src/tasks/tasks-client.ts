@@ -19,4 +19,14 @@ export class TasksClient {
     public send<T extends string>(pattern: T, data: unknown) {
         return this.client.send(pattern, data)
     }
+
+    public createComment(payload: CreateCommentPayload) {
+        return this.send('task.comment.created', payload)
+    }
+}
+
+type CreateCommentPayload = {
+    content: string
+    task: string
+    user: string
 }
