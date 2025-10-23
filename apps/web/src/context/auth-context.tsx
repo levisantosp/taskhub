@@ -54,7 +54,7 @@ export function AuthProvider({ children }: Props) {
     }, [])
 
     useEffect(() => {
-        if(user) {
+        if(user && !window.location.pathname.startsWith('/tasks')) {
             navigate({ to: '/tasks' })
         }
     }, [user, navigate])

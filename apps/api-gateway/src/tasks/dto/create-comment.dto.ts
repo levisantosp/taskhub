@@ -10,11 +10,4 @@ export class CreateComment {
     @IsNotEmpty()
     @MinLength(1)
     public content!: string
-
-    @ApiProperty({
-        description: 'Author ID'
-    })
-    @IsNotEmpty()
-    @IsUUID()
-    public authorId!: string
 }

@@ -5,9 +5,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "dev": "tsc --watch",
-    "test": "bun test.ts"
+    "test": "node test.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

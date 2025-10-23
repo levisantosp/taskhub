@@ -13,8 +13,8 @@ export class Comment {
     @Column('uuid')
     public task!: string
 
-    @Column('uuid')
-    public author!: string
+    @ManyToOne(() => User, (user) => user.comments, { eager: true })
+    public author!: User
 
     @CreateDateColumn()
     public createdAt!: Date

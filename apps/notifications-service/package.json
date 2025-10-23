@@ -3,9 +3,9 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "build": "tsc",
-        "dev": "bun --watch src/index.ts",
-        "start": "bun src/index.ts"
+        "build": "rm -rf dist && tsc",
+        "dev": "node --env-file=.env --watch dist/index.js",
+        "start": "node --env-file=.env dist/index.js"
     },
     "dependencies": {
         "@nestjs/common": "^11.1.6",
@@ -15,9 +15,9 @@
         "@nestjs/platform-socket.io": "^11.1.6",
         "@nestjs/typeorm": "^11.0.0",
         "@nestjs/websockets": "^11.1.6",
-        "@taskhub/entities": "*",
-        "@taskhub/types": "*",
-        "@taskhub/utils": "*",
+        "@taskhub/entities": "workspace:*",
+        "@taskhub/types": "workspace:*",
+        "@taskhub/utils": "workspace:*",
         "amqp-connection-manager": "^5.0.0",
         "amqplib": "^0.10.9",
         "pg": "^8.16.3",

@@ -13,7 +13,6 @@
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
         "rewriteRelativeImportExtensions": true,
-        "noEmit": true,
         "experimentalDecorators": true,
         "outDir": "./dist",
         "emitDecoratorMetadata": true

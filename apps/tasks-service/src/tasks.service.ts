@@ -152,7 +152,7 @@ export class TasksService implements OnModuleInit {
         const comment = this.comment.create({
             content: createComment.content,
             task: task.id,
-            author: author.id
+            author: author
         })
 
         await this.comment.save(comment)
