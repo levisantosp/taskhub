@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "build": "tsc",
+        "build": "rm -rf dist && tsc",
         "dev": "node --env-file=.env --watch dist/index.js",
         "start": "node --env-file=.env dist/index.js"
     },
