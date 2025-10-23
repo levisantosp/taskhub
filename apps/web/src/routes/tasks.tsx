@@ -6,7 +6,7 @@ import type { CreateTaskFormData, Task } from '@taskhub/types'
 import { Modal } from '../components/ui/modal.tsx'
 import { CreateTaskForm } from '../components/create-task-form.tsx'
 
-export function TasksPage() {
+export default function TasksPage() {
     const auth = useAuth()
 
     const [tasks, setTasks] = useState<Task[]>([])
@@ -20,7 +20,7 @@ export function TasksPage() {
     const findTasks = async () => {
         const res = await taskService.getTasks()
 
-        setTasks(res.data.tasks)
+        setTasks(res.tasks)
     }
 
     const handleCreateTask = async (data: CreateTaskFormData) => {
