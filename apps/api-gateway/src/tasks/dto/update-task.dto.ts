@@ -1,11 +1,26 @@
 import { PartialType } from '@nestjs/mapped-types'
 import { CreateTask } from './create-task.dto.ts'
-import { IsEnum, IsUUID } from 'class-validator'
+import { IsDateString, IsEnum, IsOptional, IsString, MinLength } from 'class-validator'
+import type { TaskStatus } from '@taskhub/types'
 
 export class UpdateTask extends PartialType(CreateTask) {
-    @IsEnum(['TODO', 'IN_PROGRESS', 'REVIEW', 'DONE'])
-    public status?: 'TODO' | 'IN_PROGRESS' | 'REVIEW' | 'DONE'
+    @IsOptional()
+    @IsString()
+    @MinLength(1)
+    public title?: string
 
-    @IsUUID()
-    public changedBy!: string
+    @IsOptional()
+    @IsString()
+    public description?: string
+
+    @IsOptional()
+    @IsEnum(['TODO', 'IN_PROGRESS', 'REVIEW', 'DONE'])
+    public status?: TaskStatus
+
+    @IsOptional()
+    @IsDateString()
+    public deadline?: Date
+
+    // @IsUUID()
+    // public changedBy!: string
 }
