@@ -31,12 +31,12 @@ const api = async<T>(endpoint: string, options: RequestInit = {}): Promise<T> =>
 
 export const apiClient = {
     get: <T>(endpoint: string) => api<T>(endpoint),
-    post: <T>(endpoint: string, data?: unknown) =>
+    post: <T>(endpoint: string, data: unknown) =>
         api<T>(endpoint, {
             method: 'POST',
             body: JSON.stringify(data)
         }),
-    put: <T>(endpoint: string, data?: unknown) =>
+    put: <T>(endpoint: string, data: unknown) =>
         api<T>(endpoint, {
             method: 'PUT',
             body: JSON.stringify(data)
