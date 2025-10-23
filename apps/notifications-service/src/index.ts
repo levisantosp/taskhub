@@ -4,7 +4,7 @@ import { NotificationsModule } from './notifications.module.ts'
 import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { IoAdapter } from '@nestjs/platform-socket.io'
 
-const console = new Logger()
+const console = new Logger('Notifications Service')
 
 const app = await NestFactory.create(NotificationsModule)
 
