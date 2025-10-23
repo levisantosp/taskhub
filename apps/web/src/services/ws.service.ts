@@ -7,30 +7,21 @@ export default class WebSocketService {
     
     public connect(token: string) {
         try {
-            this.socket = io('ws://localhost:3004', {
-                transports: ['websocket'],
+            this.socket = io('http://localhost:3004', {
                 auth: {
                     token: 'Bearer ' + token
                 }
             })
 
             this.socket.on('connect', () => {
-                console.log('websocket connected')
-
                 this.reconnectAttempts = 0
             })
-            
-            this.socket.on('connected', data => {
-                console.log('connected:', data)
-            })
-            
-            this.socket.onAny((event, ...args) => {
-                console.log('evento qualquer', event, args)
-            })
+            a
+            // this.socket.on('connected', data => {
+            //     console.log('connected:', data)
+            // })
 
             this.socket.on('task.created', data => {
-                console.log('task criada com sucesso', data)
-
                 this.handleMessage({
                     type: 'task.created',
                     payload: data
@@ -44,9 +35,7 @@ export default class WebSocketService {
                 })
             })
             
-            this.socket.on('disconnect', reason => {
-                console.warn('socket disconnected:', reason)
-
+            this.socket.on('disconnect', () => {
                 this.reconnect(token)
             })
             
