@@ -2,7 +2,8 @@ import { createRootRoute, createRoute, createRouter } from '@tanstack/react-rout
 import App from '../App.tsx'
 import LoginPage from './login.tsx'
 import RegisterPage from './register.tsx'
-import { TasksPage } from './tasks.tsx'
+import TasksPage from './tasks.tsx'
+import TaskPage from './task.tsx'
 
 const root = createRootRoute({ component: App })
 
@@ -30,6 +31,12 @@ const tasks = createRoute({
     component: () => <TasksPage />
 })
 
-const routeTree = root.addChildren([index, login, register, tasks])
+const task = createRoute({
+    getParentRoute: () => root,
+    path: '/tasks/$id',
+    component: () => <TaskPage />
+})
+
+const routeTree = root.addChildren([index, login, register, tasks, task])
 
 export const router = createRouter({ routeTree })
