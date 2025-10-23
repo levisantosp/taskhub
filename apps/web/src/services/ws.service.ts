@@ -16,7 +16,7 @@ export default class WebSocketService {
             this.socket.on('connect', () => {
                 this.reconnectAttempts = 0
             })
-            a
+            
             // this.socket.on('connected', data => {
             //     console.log('connected:', data)
             // })
