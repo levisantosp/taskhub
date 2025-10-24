@@ -36,6 +36,7 @@ export interface CreateTaskFormData {
     description?: string
     deadline: string
     priority: TaskPriority
+    status: TaskStatus
 }
 
 export interface UpdateTaskData extends Partial<CreateTaskData> {
@@ -61,39 +62,30 @@ export type TaskEvent =
     | 'task.comment.created'
 
 export interface TaskCreatedEvent {
-    type: 'task.created'
-    payload: {
-        id: string
-        title: string
-        description: string
-        createdBy: string
-        assignedUsers: string[]
-        createdAt: Date
-    }
+    id: string
+    title: string
+    description: string
+    createdBy: string
+    assignedUsers: string[]
+    createdAt: Date
 }
 
 export interface TaskUpdatedEvent {
-    type: 'task.updated'
-    payload: {
-        id: string
-        title: string
-        description: string
-        status: string
-        priority: string
-        updatedAt: Date
-        changedBy: string
-    }
+    id: string
+    title: string
+    description: string
+    status: string
+    priority: string
+    updatedAt: Date
+    changedBy: string
 }
 
 export interface TaskCommentCreatedEvent {
-    type: 'task.comment.created'
-    payload: {
-        id: string
-        content: string
-        taskId: string
-        authorId: string
-        createdAt: Date
-    }
+    id: string
+    content: string
+    taskId: string
+    authorId: string
+    createdAt: Date
 }
 
 export type BaseRabbitMQEVent = TaskCreatedEvent | TaskUpdatedEvent | TaskCommentCreatedEvent
