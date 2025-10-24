@@ -1,10 +1,11 @@
 import {
     Body,
     Controller,
+    DefaultValuePipe,
     Delete,
     Get,
-    Inject,
     Param,
+    ParseIntPipe,
     ParseUUIDPipe,
     Post,
     Put,
@@ -25,14 +26,17 @@ import { UpdateTask } from './dto/update-task.dto.ts'
 @Controller('tasks')
 @UseGuards(JwtAuthGuard)
 export class TasksController {
-    public constructor(private readonly task: TasksClient) {}
+    public constructor(private readonly task: TasksClient) { }
 
     @Get()
-    public async findAll(
-        @Query('page') page = 1,
-        @Query('size') size = 10
+    public async findMany(
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+        @Query('size', new DefaultValuePipe(10), ParseIntPipe) size: number,
+        @Query('search', new DefaultValuePipe('')) search: string,
+        @Query('status', new DefaultValuePipe('ALL')) status: string,
+        @Query('priority', new DefaultValuePipe('ALL')) priority: string
     ) {
-        return await firstValueFrom(this.task.send('find.tasks', { page, size }))
+        return await firstValueFrom(this.task.send('find.tasks', { page, size, status, priority, search }))
     }
 
     @Get(':id')
