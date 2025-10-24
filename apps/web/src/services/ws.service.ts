@@ -9,8 +9,6 @@ export default class WebSocketService {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]))
 
-            console.log(payload)
-
             if(!payload.sub) return
 
             this.socket = io('http://localhost:3004', {
@@ -31,11 +29,7 @@ export default class WebSocketService {
                     payload: data
                 })
             })
-            
-            // this.socket.on('connected', data => {
-            //     console.log('connected:', data)
-            // })
-            
+
             this.socket.on('disconnect', () => {
                 this.reconnect(token)
             })
@@ -51,8 +45,6 @@ export default class WebSocketService {
     }
     
     private handleMessage(data: unknown) {
-        console.log('[ws.service] chamando handleMessage com:', data)
-
         const event = new CustomEvent('websocket.message', { detail: data })
         
         window.dispatchEvent(event) 
