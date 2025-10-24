@@ -8,7 +8,7 @@ type Props = {
 }
 
 export function Modal(props: Props) {
-    if (!props.isOpen) return null
+    if(!props.isOpen) return null
 
     return (
         <>
