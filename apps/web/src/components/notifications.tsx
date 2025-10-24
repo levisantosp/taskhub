@@ -28,7 +28,6 @@ export default function Notifications() {
                             </h4>
 
                             <Button
-                                variant='ghost'
                                 size='sm'
                                 onClick={() => ws.removeNotification(index)}
                                 className='h-6 w-6 p-0'
@@ -37,23 +36,26 @@ export default function Notifications() {
                             </Button>
                         </div>
 
-                        <p
-                            className='text-sm text-gray-600'
+                        <h5
+                            className='text-base font-bold text-gray-600'
                         >
-                            {JSON.stringify(notification.payload, null, 2)}
+                            {notification.payload.title}
+                        </h5>
+
+                        <p>
+                            {notification.payload.message}
                         </p>
 
-                        <p
+                        <span
                             className='text-xs text-gray-400 mt-2'
                         >
                             {notification.timestamp.toLocaleTimeString()}
-                        </p>
+                        </span>
                     </div>
                 ))}
 
                 {ws.notifications.length > 1 && (
                     <Button
-                        variant='outline'
                         size='sm'
                         onClick={ws.clearNotifications}
                         className='w-full'

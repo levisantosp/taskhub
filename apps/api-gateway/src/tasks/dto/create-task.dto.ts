@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsEnum, IsArray, IsDateString, IsUUID } from 'class-validator'
+import type { TaskPriority, TaskStatus } from '@taskhub/types'
+import { IsString, IsOptional, IsEnum, IsArray, IsDateString } from 'class-validator'
 
 export class CreateTask {
     @IsString()
@@ -9,16 +10,15 @@ export class CreateTask {
     public description?: string
 
     @IsDateString()
-    public deadline!: Date
+    public deadline!: string
 
     @IsEnum(['LOW', 'MEDIUM', 'HIGH', 'URGENT'])
-    @IsOptional()
-    public priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+    public priority!: TaskPriority
+
+    @IsEnum(['TODO', 'IN_PROGRESS', 'REVIEW', 'DONE'])
+    public status!: TaskStatus
 
     @IsArray()
     @IsOptional()
-    public assignedUserIds?: string[]
-
-    @IsUUID()
-    public createdBy!: string
+    public assignedUsers?: string[]
 }

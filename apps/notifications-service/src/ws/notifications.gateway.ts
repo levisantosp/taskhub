@@ -22,15 +22,15 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
     @WebSocketServer()
     public server!: Server
 
-    public console = new Logger()
+    public console = new Logger('WebSocket')
     private sockets = new Map<string, Socket[]>()
 
     public handleConnection(client: Socket) {
-        this.console.log(`[WebSocket] - Client connected: ${client.id}`)
+        this.console.log(`Client connected: ${client.id}`)
     }
 
     public handleDisconnect(client: Socket) {
-        this.console.log(`[WebSocket] - Client disconnected: ${client.id}`)
+        this.console.log(`Client disconnected: ${client.id}`)
 
         for(const [user, sockets] of this.sockets.entries()) {
             const i = sockets.indexOf(client)
@@ -75,32 +75,5 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
         this.register(user, client)
 
         return { ok: true }
-    }
-
-    @EventPattern('task.created')
-    public handleTaskCreated(@Payload() task: any) {
-        if(task.createdBy) {
-            this.sendTo(task.createdBy, 'task.created', task)
-        }
-
-        if(task.assignedUsers.length) {
-            for(const user of task.assignedUsers) {
-                if(user === task.createdBy) continue
-                
-                this.sendTo(user, 'task.created', task)
-            }
-        }
-    }
-
-    @EventPattern('task.updated')
-    public handleTaskUpdated(@Payload() task: any) {
-        // TODO: assigned users list
-        this.broadcast('task.updated', task)
-    }
-
-    @EventPattern('task.comment.created')
-    public handleCommentCreated(@Payload() comment: any) {
-        // TODO: notify only assigned users
-        this.broadcast('task.comment.created', comment)
     }
 }

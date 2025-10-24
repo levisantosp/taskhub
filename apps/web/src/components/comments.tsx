@@ -32,16 +32,42 @@ export default function Comments(props: Props) {
 
     useEffect(() => {
         fetch()
+
+        const handleWebsocketMessage = (event: CustomEvent) => {
+            const message = event.detail
+
+            console.log('message received (comments)', message)
+
+            if(
+                message.type === 'task.comment.created'
+                && message.payload.taskId === props.task
+            ) {
+                setComments(prev => {
+                    if(prev.some(c => c.id === message.payload.id)) {
+                        return prev
+                    }
+
+                    return [...prev, message.payload]
+                })
+
+                // TODO: ADD TOAST NOTIFICATIONS
+            }
+        }
+
+        window.addEventListener('websocket.message', handleWebsocketMessage as EventListener)
+
+        return () =>
+            window.removeEventListener('websocket.message', handleWebsocketMessage as EventListener)
     }, [props.task])
 
     const onSubmit = async(data: CommentSchema) => {
-        console.log(data)
-
         await taskService.createComment(props.task, data.content)
 
         form.reset()
 
         await fetch()
+
+        // TODO: SUCCESSFULL TOAST
     }
 
     return (

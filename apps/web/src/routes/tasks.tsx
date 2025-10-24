@@ -15,29 +15,51 @@ export default function TasksPage() {
 
     useEffect(() => {
         findTasks()
+
+        const handleWebsocketMessage = (event: CustomEvent) => {
+            const message = event.detail
+
+            console.log('message received', message)
+
+            if(message.type === 'notification') {
+                if(
+                    ['task.created', 'task.updated', 'task.assigned']
+                        .includes(message.payload.type)
+                ) {
+                    findTasks()
+                }
+            }
+        }
+
+        window.addEventListener('websocket.message', handleWebsocketMessage as EventListener)
+
+        return () =>
+            window.removeEventListener('websocket.message', handleWebsocketMessage as EventListener)
     }, [])
 
-    const findTasks = async () => {
+    const findTasks = async() => {
         const res = await taskService.getTasks()
 
         setTasks(res.tasks)
     }
 
-    const handleCreateTask = async (data: CreateTaskFormData) => {
+    const handleCreateTask = async(data: CreateTaskFormData) => {
         setIsSubmitting(true)
 
         await taskService.createTask({
-            task: {
-                ...data,
-                assignedUsersId: [auth.user?.id],
-                createdBy: auth.user?.id
-            },
-            author: auth.user?.id
+            title: data.title,
+            description: data.description,
+            deadline: new Date(data.deadline).toISOString(),
+            priority: data.priority,
+            status: data.status
         })
 
-        await findTasks()
+        // await findTasks()
 
         setIsModalOpen(false)
+        setIsSubmitting(false)
+
+        // TODO: SUCCESS TOAST
     }
 
     return (

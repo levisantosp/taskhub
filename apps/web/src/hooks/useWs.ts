@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 type Notification = {
     type: string
-    payload: unknown
+    payload: any
     timestamp: Date
 }
 

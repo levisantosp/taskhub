@@ -22,7 +22,7 @@ export class TasksService implements OnModuleInit {
         @InjectRepository(TaskHistory)
         private history: Repository<TaskHistory>,
 
-        @Inject('notifications:bus')
+        @Inject('notifications.queue')
         private notifications: ClientProxy
     ) {}
 

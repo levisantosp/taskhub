@@ -19,8 +19,5 @@ export class UpdateTask extends PartialType(CreateTask) {
 
     @IsOptional()
     @IsDateString()
-    public deadline?: Date
-
-    // @IsUUID()
-    // public changedBy!: string
+    public deadline?: string
 }

@@ -7,6 +7,12 @@ export default class WebSocketService {
     
     public connect(token: string) {
         try {
+            const payload = JSON.parse(atob(token.split('.')[1]))
+
+            console.log(payload)
+
+            if(!payload.sub) return
+
             this.socket = io('http://localhost:3004', {
                 auth: {
                     token: 'Bearer ' + token
@@ -15,25 +21,20 @@ export default class WebSocketService {
 
             this.socket.on('connect', () => {
                 this.reconnectAttempts = 0
+
+                this.socket?.emit('register', payload.sub)
+            })
+
+            this.socket.on('notification', data => {
+                this.handleMessage({
+                    type: 'notification',
+                    payload: data
+                })
             })
             
             // this.socket.on('connected', data => {
             //     console.log('connected:', data)
             // })
-
-            this.socket.on('task.created', data => {
-                this.handleMessage({
-                    type: 'task.created',
-                    payload: data
-                })
-            })
-
-            this.socket.on('task.updated', data => {
-                this.handleMessage({
-                    type: 'task.updated',
-                    payload: data
-                })
-            })
             
             this.socket.on('disconnect', () => {
                 this.reconnect(token)
@@ -50,6 +51,8 @@ export default class WebSocketService {
     }
     
     private handleMessage(data: unknown) {
+        console.log('[ws.service] chamando handleMessage com:', data)
+
         const event = new CustomEvent('websocket.message', { detail: data })
         
         window.dispatchEvent(event) 
