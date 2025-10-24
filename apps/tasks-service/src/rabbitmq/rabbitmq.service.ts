@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import type { RabbitMQEvent } from '@taskhub/types'
-import { info } from '@taskhub/utils'
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices'
 import { firstValueFrom } from 'rxjs'
 
 @Injectable()
 export class RabbitMqService {
     private client: ClientProxy
+    private logger = new Logger('Tasks Service')
 
     public constructor() {
         this.client = ClientProxyFactory.create({
@@ -22,12 +22,10 @@ export class RabbitMqService {
     public async onModuleInit() {
         await this.client.connect()
 
-        info('RabbitMQ connected successfully!')
+        this.logger.log('RabbitMQ connected successfully!')
     }
 
     public async publishEvent(event: RabbitMQEvent) {
-        await firstValueFrom(this.client.emit(event.type, event))
-
-        info(`Event published: ${event.type}`)
+        await firstValueFrom(this.client.emit(event, event))
     }
 }
