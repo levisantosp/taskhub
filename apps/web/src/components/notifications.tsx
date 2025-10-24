@@ -4,7 +4,11 @@ import { Button } from './ui/button.tsx'
 export default function Notifications() {
     const ws = useWebSocket()
 
-    if(!ws.notifications.length) {
+    const notifications = ws.notifications.filter(n =>
+        n.payload.type !== 'task.comment.created'
+    )
+
+    if(!notifications.length) {
         return null
     }
 
@@ -13,7 +17,7 @@ export default function Notifications() {
             <div
                 className='fixed top-4 right-4 z-50 space-y-2 max-w-sm'
             >
-                {ws.notifications.map((notification, index) => (
+                {notifications.map((notification, index) => (
                     <div
                         key={index}
                         className='bg-white border rounded-lg shadow-lg p-4 animate-in slide-in-from-right'
@@ -54,7 +58,7 @@ export default function Notifications() {
                     </div>
                 ))}
 
-                {ws.notifications.length > 1 && (
+                {notifications.length > 1 && (
                     <Button
                         size='sm'
                         onClick={ws.clearNotifications}
