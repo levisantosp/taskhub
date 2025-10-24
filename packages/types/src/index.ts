@@ -84,7 +84,7 @@ export interface TaskCommentCreatedEvent {
     id: string
     content: string
     taskId: string
-    authorId: string
+    author: User
     createdAt: Date
 }
 

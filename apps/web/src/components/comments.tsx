@@ -7,6 +7,8 @@ import { taskService } from '../services/tasks.service.ts'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form.tsx'
 import { Textarea } from './ui/textarea.tsx'
 import { Button } from './ui/button.tsx'
+import { toast } from 'sonner'
+import { useNavigate } from '@tanstack/react-router'
 
 const commentSchema = z.object({ content: z.string().min(1, 'Comment needs to be provided') })
 
@@ -14,6 +16,7 @@ type CommentSchema = z.infer<typeof commentSchema>
 
 type Props = {
     task: string
+    user: string
 }
 
 export default function Comments(props: Props) {
@@ -30,27 +33,31 @@ export default function Comments(props: Props) {
         setComments(res.comments)
     }
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         fetch()
 
         const handleWebsocketMessage = (event: CustomEvent) => {
             const message = event.detail
 
-            console.log('message received (comments)', message)
-
             if(
-                message.type === 'task.comment.created'
-                && message.payload.taskId === props.task
+                message.type === 'notification'
+                && message.payload.metadata.task === props.task
+                && message.payload.userId !== props.user
             ) {
-                setComments(prev => {
-                    if(prev.some(c => c.id === message.payload.id)) {
-                        return prev
-                    }
+                if(message.payload.type === 'task.comment.created') {
+                    fetch()
+                }
 
-                    return [...prev, message.payload]
+                toast.info(message.payload.title, {
+                    description: message.payload.message,
+                    action: {
+                        label: 'View',
+                        onClick: () => navigate({ to: `/tasks/${props.task}` })
+                    },
+                    duration: 10000
                 })
-
-                // TODO: ADD TOAST NOTIFICATIONS
             }
         }
 
@@ -61,11 +68,23 @@ export default function Comments(props: Props) {
     }, [props.task])
 
     const onSubmit = async(data: CommentSchema) => {
-        await taskService.createComment(props.task, data.content)
+        try {
+            await taskService.createComment(props.task, data.content)
 
-        form.reset()
+            form.reset()
 
-        await fetch()
+            await fetch()
+
+            toast.success('Comment added successfully')
+        }
+
+        catch(e) {
+            console.error(e)
+
+            toast.error('An unexpected error has occurred', {
+                description: (e as Error).message
+            })
+        }
 
         // TODO: SUCCESSFULL TOAST
     }

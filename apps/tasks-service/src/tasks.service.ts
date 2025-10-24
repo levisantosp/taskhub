@@ -158,7 +158,7 @@ export class TasksService implements OnModuleInit {
         await this.comment.save(comment)
 
         this.notifications.emit('task.comment.created', {
-            authorId: comment.author,
+            author: comment.author,
             content: comment.content,
             createdAt: comment.createdAt,
             id: comment.id,

@@ -68,16 +68,16 @@ export class RabbitMqConsumer {
     @MessagePattern('task.comment.created')
     public async handleTaskCommendCreated(@Payload() data: RabbitMQEvent<TaskCommentCreatedEvent>) {
         const notification = await this.notification.create({
-            type: 'task.updated',
-            title: 'Task updated',
-            message: `New comment on task: "${data.content}"`,
-            userId: data.authorId,
+            type: 'task.comment.created',
+            title: 'New comment on a task you are assigned',
+            message: `Someone commented: "${data.content}"`,
+            userId: data.author.id,
             metadata: {
                 task: data.taskId,
                 comment: data.id
             }
         })
 
-        this.ws.sendTo(data.authorId, 'notification', notification)
+        this.ws.sendTo(data.author.id, 'notification', notification)
     }
 }

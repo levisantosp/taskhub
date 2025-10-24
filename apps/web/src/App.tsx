@@ -1,6 +1,7 @@
 import { Outlet } from '@tanstack/react-router'
 import { AuthProvider } from './context/auth-context.tsx'
 import Notifications from './components/notifications.tsx'
+import { Toaster } from './components/ui/sonner.tsx'
 
 export default function App() {
     return (
@@ -11,6 +12,7 @@ export default function App() {
                 >
                     <Outlet />
                     <Notifications />
+                    <Toaster richColors position='top-right' />
                 </div>
             </AuthProvider>
         </>
