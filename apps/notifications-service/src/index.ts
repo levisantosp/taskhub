@@ -29,4 +29,4 @@ const port = process.env.PORT || 3004
 await app.listen(port)
 
 console.log(`🔔 Notifications Service running at ${port}`)
-console.log('🐰 RabbitMQ connected succesfully!')
+console.log('🐰 RabbitMQ connected successfully!')

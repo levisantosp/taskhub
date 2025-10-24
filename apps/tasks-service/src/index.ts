@@ -35,4 +35,4 @@ await app.startAllMicroservices()
 await app.listen(port)
 
 console.log(`📕 Tasks Service running at ${port}`)
-console.log(`🐰 RabbitMQ connected succesfully!`)
+console.log(`🐰 RabbitMQ connected successfully!`)

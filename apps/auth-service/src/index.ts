@@ -34,4 +34,4 @@ await app.startAllMicroservices()
 await app.listen(port)
 
 console.log(`🔒 Auth Service running at ${port}`)
-console.log(`🐰 RabbitMQ connected succesfully!`)
+console.log(`🐰 RabbitMQ connected successfully!`)
