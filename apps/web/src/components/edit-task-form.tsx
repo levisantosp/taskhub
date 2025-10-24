@@ -9,6 +9,7 @@ import { Input } from './ui/input.tsx'
 import { Textarea } from './ui/textarea.tsx'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select.tsx'
 import { Button } from './ui/button.tsx'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
     title: z.string().optional(),
@@ -42,14 +43,27 @@ export default function EditTaskForm(props: Props) {
     })
 
     const onSubmit = async(data: FormSchema) => {
-        await taskService.updateTask(props.task.id, data)
+        try {
+            await taskService.updateTask(props.task.id, {
+                ...data,
+                deadline: !data.deadline ? props.task.deadline : data.deadline
+            })
 
-        props.onClose()
-        props.onTaskUpdate()
+            props.onClose()
+            props.onTaskUpdate()
 
-        setIsOpen(false)
+            setIsOpen(false)
 
-        // TODO: maybe add success and error notification
+            toast.success('Task updated successfully!')
+        }
+
+        catch(e) {
+            console.error(e)
+
+            toast.error('Error updating task', {
+                description: (e as Error).message
+            })
+        }
     }
 
     return (
