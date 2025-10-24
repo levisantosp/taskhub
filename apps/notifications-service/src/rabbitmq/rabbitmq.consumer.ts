@@ -1,6 +1,11 @@
-import { Controller } from '@nestjs/common'
+import { Controller, Logger } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
-import type { RabbitMQEvent, TaskCommentCreatedEvent, TaskCreatedEvent, TaskUpdatedEvent } from '@taskhub/types'
+import type {
+    RabbitMQEvent,
+    TaskCommentCreatedEvent,
+    TaskCreatedEvent,
+    TaskUpdatedEvent
+} from '@taskhub/types'
 import { NotificationsService } from '../notifications.service.ts'
 import { NotificationsGateway } from '../ws/notifications.gateway.ts'
 
@@ -13,34 +18,34 @@ export class RabbitMqConsumer {
 
     @MessagePattern('task.created')
     public async handleTaskCreated(@Payload() data: RabbitMQEvent<TaskCreatedEvent>) {
-        for(const user of data.payload.assignedUsers) {
+        for(const user of data.assignedUsers) {
             const notification = await this.notification.create({
                 type: 'task.assigned',
                 title: 'New assigned task',
-                message: `You have been assigned to task "${data.payload.title}"`,
+                message: `You have been assigned to task "${data.title}"`,
                 userId: user,
                 metadata: {
-                    task: data.payload.id,
-                    title: data.payload.title
+                    task: data.id,
+                    title: data.title
                 }
             })
 
             this.ws.sendTo(user, 'notification', notification)
         }
 
-        if(!data.payload.assignedUsers.includes(data.payload.createdBy)) {
+        if(!data.assignedUsers.includes(data.createdBy)) {
             const notification = await this.notification.create({
                 type: 'task.created',
                 title: 'Task created',
-                message: `You created the task "${data.payload.title}"`,
-                userId: data.payload.createdBy,
+                message: `You created the task "${data.title}"`,
+                userId: data.createdBy,
                 metadata: {
-                    task: data.payload.id,
-                    title: data.payload.title
+                    task: data.id,
+                    title: data.title
                 }
             })
 
-            this.ws.sendTo(data.payload.createdBy, 'notification', notification)
+            this.ws.sendTo(data.createdBy, 'notification', notification)
         }
     }
 
@@ -49,15 +54,15 @@ export class RabbitMqConsumer {
         const notification = await this.notification.create({
             type: 'task.updated',
             title: 'Task updated',
-            message: `You updated the task "${data.payload.title}"`,
-            userId: data.payload.changedBy,
+            message: `You updated the task "${data.title}"`,
+            userId: data.changedBy,
             metadata: {
-                task: data.payload.id,
-                title: data.payload.title
+                task: data.id,
+                title: data.title
             }
         })
 
-        this.ws.sendTo(data.payload.changedBy, 'notification', notification)
+        this.ws.sendTo(data.changedBy, 'notification', notification)
     }
 
     @MessagePattern('task.comment.created')
@@ -65,14 +70,14 @@ export class RabbitMqConsumer {
         const notification = await this.notification.create({
             type: 'task.updated',
             title: 'Task updated',
-            message: `New comment on task: "${data.payload.content}"`,
-            userId: data.payload.authorId,
+            message: `New comment on task: "${data.content}"`,
+            userId: data.authorId,
             metadata: {
-                task: data.payload.taskId,
-                comment: data.payload.id
+                task: data.taskId,
+                comment: data.id
             }
         })
 
-        this.ws.sendTo(data.payload.authorId, 'notification', notification)
+        this.ws.sendTo(data.authorId, 'notification', notification)
     }
 }
