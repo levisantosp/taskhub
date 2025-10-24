@@ -50,6 +50,8 @@ export function AuthProvider({ children }: Props) {
                 email: payload.email,
                 username: payload.username
             })
+
+            ws.connect(token)
         }
     }, [])
 
