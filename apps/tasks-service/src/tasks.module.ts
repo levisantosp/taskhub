@@ -21,7 +21,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
         TypeOrmModule.forFeature([Task, User, Comment, TaskHistory]),
         ClientsModule.register([
             {
-                name: 'notifications:bus',
+                name: 'notifications.queue',
                 transport: Transport.RMQ,
                 options: {
                     urls: [process.env.RABBITMQ_URL || 'amqp://admin:admin@localhost:5672'],
