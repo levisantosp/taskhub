@@ -5,7 +5,11 @@
     "scripts": {
         "build": "rm -rf dist && tsc",
         "start": "node --env-file=.env dist/index.js",
-        "dev": "node --env-file=.env --watch dist/index.js"
+        "dev": "node --env-file=.env --watch dist/index.js",
+        "typeorm": "typeorm-ts-node-commonjs -d ./src/data-source.ts",
+        "migration:generate": "pnpm typeorm migration:generate",
+        "migration:run": "pnpm typeorm migration:run",
+        "migration:revert": "pnpm typeorm migration:revert"        
     },
     "dependencies": {
         "@nestjs/common": "^11.1.6",
@@ -27,6 +31,8 @@
     "devDependencies": {
         "@nestjs/cli": "^11.0.10",
         "@types/amqplib": "^0.10.7",
+        "dotenv": "^17.2.3",
+        "ts-node": "^10.9.2",
         "typescript": "^5.9.3"
     }
 }

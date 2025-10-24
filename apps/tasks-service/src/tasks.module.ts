@@ -4,20 +4,11 @@ import { TasksService } from './tasks.service.ts'
 import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 import { TasksController } from './tasks.controller.ts'
 import { ClientsModule, Transport } from '@nestjs/microservices'
+import { dataSourceOptions } from './data-source.ts'
 
 @Module({
     imports: [
-        TypeOrmModule.forRoot({
-            type: 'postgres',
-            host: process.env.DB_HOST || 'localhost',
-            port: parseInt(process.env.DB_PORT as string) || 5432,
-            username: process.env.DB_USER || 'postgres',
-            password: process.env.DB_PASS || 'admin',
-            database: process.env.DB_NAME || 'localhost',
-            entities: [Task, User, Comment, TaskHistory],
-            synchronize: true,
-            logging: true
-        }),
+        TypeOrmModule.forRoot(dataSourceOptions),
         TypeOrmModule.forFeature([Task, User, Comment, TaskHistory]),
         ClientsModule.register([
             {
@@ -34,4 +25,4 @@ import { ClientsModule, Transport } from '@nestjs/microservices'
     controllers: [TasksController],
     providers: [TasksService]
 })
-export class TasksModule {}
+export class TasksModule { }

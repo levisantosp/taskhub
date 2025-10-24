@@ -33,6 +33,8 @@
         "@types/bcryptjs": "^3.0.0",
         "@types/passport-jwt": "^4.0.1",
         "@types/passport-local": "^1.0.38",
+        "dotenv": "^17.2.3",
+        "ts-node": "^10.9.2",
         "typescript": "^5.9.3"
     }
 }
