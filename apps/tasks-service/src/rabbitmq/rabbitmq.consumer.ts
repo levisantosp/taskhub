@@ -17,7 +17,7 @@ export class RabbitMQConsumer {
         }
     ) {
         try {
-            const result = await this.task.findAll(data.page, data.size)
+            const result = await this.task.findMany(data.page, data.size)
 
             return { ok: true, data: result }
         }
