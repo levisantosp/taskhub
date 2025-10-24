@@ -3,9 +3,12 @@ import { IsEmail, IsString, Matches, MinLength } from 'class-validator'
 export class RegisterDto {
     @IsString()
     @MinLength(3)
+    @Matches(/^[a-zA-Z0-9_]+$/, { message: 'Username can only contain letters, numbers and underscores' })
     public username!: string
     
-    @IsEmail()
+    @IsEmail(undefined, {
+        message: 'Please provide an valid email address'
+    })
     public email!: string
 
     @IsString()
