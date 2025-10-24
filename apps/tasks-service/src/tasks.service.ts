@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException, OnModuleInit } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, In } from 'typeorm'
+import { Brackets, Repository } from 'typeorm'
 import { CreateTask } from './dto/create-task.dto.ts'
 import { UpdateTask } from './dto/update-task.dto.ts'
 import { CreateComment } from './dto/create-comment.dto.ts'
@@ -57,14 +57,33 @@ export class TasksService implements OnModuleInit {
         return task
     }
 
-    public async findAll(page = 1, size = 10) {
-        const [tasks, total] = await this.task.findAndCount({
-            skip: (page - 1) * size,
-            take: size,
-            order: {
-                createdAt: 'DESC'
-            }
-        })
+    public async findMany(
+        page = 1,
+        size = 10,
+        search?: string,
+        status?: string,
+        priority?: string
+    ) {
+        const query = this.task.createQueryBuilder('task')
+            .orderBy('task.createdAt', 'DESC')
+            .skip((page - 1) * size)
+            .take(size)
+
+        if(search) {
+            query.andWhere(new Brackets(qb => {
+                qb.where('task.title ILIKE :search', { search: `%${search}%` })
+                    .orWhere('task.description ILIKE :search', { search: `%${search}%` })
+            }))
+        }
+
+        if(status && status !== 'ALL') {
+            query.andWhere('task.status = :status', { status: status.toUpperCase() })
+        }
+        if(priority && priority !== 'ALL') {
+            query.andWhere('task.priority = :priority', { priority: priority.toUpperCase() })
+        }
+
+        const [tasks, total] = await query.getManyAndCount()
 
         return {
             tasks,
@@ -123,7 +142,7 @@ export class TasksService implements OnModuleInit {
         })
 
         await this.logChanges(task, old, author)
-        
+
         return task
     }
 
@@ -196,7 +215,7 @@ export class TasksService implements OnModuleInit {
     private async logChanges(task: Task, oldValues: any, changedBy: User) {
         const fields = ['title', 'description', 'priority', 'status'] as const
 
-        for(const field of fields) {
+        for (const field of fields) {
             if(oldValues[field] !== task[field]) {
                 const history = this.history.create({
                     field,

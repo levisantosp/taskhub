@@ -15,8 +15,16 @@ export class TasksController {
     }
 
     @MessagePattern('find.tasks')
-    public async findAll(@Payload() payload: { page: number, size: number }) {
-        return await this.task.findAll(payload.page, payload.size)
+    public async findMany(
+        @Payload(new ValidationPipe()) payload: {
+            page: number
+            size: number
+            priority?: string
+            status?: string
+            search?: string
+        }
+    ) {
+        return await this.task.findMany(payload.page, payload.size, payload.search, payload.status, payload.priority)
     }
 
     @MessagePattern('find.task')
