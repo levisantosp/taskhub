@@ -7,6 +7,7 @@ import { Button } from '../components/ui/button.tsx'
 import { Modal } from '../components/ui/modal.tsx'
 import EditTaskForm from '../components/edit-task-form.tsx'
 import Comments from '../components/comments.tsx'
+import { useAuth } from '../context/auth-context.tsx'
 
 export default function TaskPage() {
     const { id } = useParams({ from: '/tasks/$id' })
@@ -15,7 +16,9 @@ export default function TaskPage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const fetch = async () => {
+    const auth = useAuth()
+
+    const fetch = async() => {
         const res = await taskService.getTask(id)
 
         setTask(res)
@@ -27,7 +30,7 @@ export default function TaskPage() {
         fetch()
     }, [id])
 
-    if(!task) {
+    if(!task || !auth.user) {
         return null
     }
 
@@ -102,7 +105,10 @@ export default function TaskPage() {
                         Comments
                     </h2>
 
-                    <Comments task={task.id} />
+                    <Comments
+                        task={task.id}
+                        user={auth.user.id}
+                    />
                 </div>
             </div>
 
