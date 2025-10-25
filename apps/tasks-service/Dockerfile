@@ -18,4 +18,4 @@ RUN pnpm build
 
 WORKDIR /app/apps/tasks-service
 
-CMD ["pnpm", "start"]
+CMD ["sh", "-c", "pnpm migration:run && pnpm start"]
