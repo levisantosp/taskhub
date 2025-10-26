@@ -66,7 +66,7 @@ export function AuthProvider({ children }: Props) {
 
         const currentPath = window.location.pathname
 
-        if(!token && (currentPath === '/tasks' || currentPath === '/')) {
+        if(!token && (currentPath.startsWith('/tasks') || currentPath === '/')) {
             navigate({ to: '/login' })
         }
     }, [navigate])
@@ -74,6 +74,8 @@ export function AuthProvider({ children }: Props) {
     const login = async(email: string, pass: string) => {
         try {
             const res = await apiClient.post<LoginRes>('/auth/login', { email, password: pass })
+
+            console.log(res)
 
             setUser(res.data.user)
 
