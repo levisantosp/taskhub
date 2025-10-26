@@ -75,8 +75,6 @@ export function AuthProvider({ children }: Props) {
         try {
             const res = await apiClient.post<LoginRes>('/auth/login', { email, password: pass })
 
-            console.log(res)
-
             setUser(res.data.user)
 
             localStorage.setItem('accessToken', res.data.accessToken)
