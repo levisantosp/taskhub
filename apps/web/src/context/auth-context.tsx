@@ -66,7 +66,7 @@ export function AuthProvider({ children }: Props) {
 
         const currentPath = window.location.pathname
 
-        if(!token && (currentPath === '/tasks' || currentPath === '/')) {
+        if(!token && (currentPath.startsWith('/tasks') || currentPath === '/')) {
             navigate({ to: '/login' })
         }
     }, [navigate])
