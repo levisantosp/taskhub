@@ -5,14 +5,14 @@ import { Repository } from 'typeorm'
 import { RegisterDto } from './dto/register.dto.ts'
 import { LoginDto } from './dto/login.dto.ts'
 import AuthUtils from '@taskhub/utils/dist/auth.js'
-import { BaseUser } from '@taskhub/entities'
+import { BaseUser, User } from '@taskhub/entities'
 import { error } from '@taskhub/utils'
 
 @Injectable()
 export class AuthService {
     public constructor(
-        @InjectRepository(BaseUser)
-        private user: Repository<BaseUser>,
+        @InjectRepository(User)
+        private user: Repository<User>,
         private jwtService: JwtService
     ) {}
 

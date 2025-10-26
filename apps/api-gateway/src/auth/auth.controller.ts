@@ -2,6 +2,8 @@ import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/commo
 import { AuthClient } from './auth-client.ts'
 import { firstValueFrom } from 'rxjs'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { RegisterDto } from './dto/register.dto.ts'
+import { LoginDto } from './dto/login.dto.ts'
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -12,7 +14,7 @@ export class AuthController {
     @ApiOperation({ summary: 'Register a new user' })
     @ApiResponse({ status: 201, description: 'User registration attempt response' })
     @ApiResponse({ status: 400, description: 'Bad Request (Likely validation error from microservice)' })
-    public async register(@Body() data: unknown) {
+    public async register(@Body() data: RegisterDto) {
         try {
             return await firstValueFrom(this.client.send('register', data))
         }
@@ -26,7 +28,7 @@ export class AuthController {
     @ApiOperation({ summary: 'Log in a user' })
     @ApiResponse({ status: 200, description: 'User login attempt response' })
     @ApiResponse({ status: 401, description: 'Unauthorized (Invalid credentials or other login failure)' })
-    public async login(@Body() data: unknown) {
+    public async login(@Body() data: LoginDto) {
         try {
             return await firstValueFrom(this.client.send('login', data))
         }
@@ -37,10 +39,10 @@ export class AuthController {
     }
 
     @Post('refresh')
-    @ApiOperation({ summary: 'Refresh access token' }) // Added operation
+    @ApiOperation({ summary: 'Refresh access token' })
     @ApiResponse({ status: 200, description: 'Token refresh attempt response' })
     @ApiResponse({ status: 401, description: 'Unauthorized (Invalid or expired refresh token)' })
-    public async refresh(@Body() data: unknown) {
+    public async refresh(@Body() data: { refreshToken: string }) {
         try {
             return await firstValueFrom(this.client.send('refresh', data))
         }

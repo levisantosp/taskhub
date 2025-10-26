@@ -1,7 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { Exclude } from 'class-transformer'
 
-@Entity('users')
 export class BaseUser {
     @PrimaryGeneratedColumn('uuid')
     public id!: string
