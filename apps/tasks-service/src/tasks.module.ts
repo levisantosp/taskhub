@@ -5,6 +5,7 @@ import { Task, User, Comment, TaskHistory } from '@taskhub/entities'
 import { TasksController } from './tasks.controller.ts'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { dataSourceOptions } from './data-source.ts'
+import { HealthModule } from './health/health.module.ts'
 
 @Module({
     imports: [
@@ -20,9 +21,10 @@ import { dataSourceOptions } from './data-source.ts'
                     queueOptions: { durable: true }
                 }
             }
-        ])
+        ]),
+        HealthModule
     ],
     controllers: [TasksController],
     providers: [TasksService]
 })
-export class TasksModule { }
+export class TasksModule {}

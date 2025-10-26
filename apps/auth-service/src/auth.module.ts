@@ -8,6 +8,7 @@ import { JwtStrategy } from './strategies/jwt.strategy.ts'
 import { BaseUser } from '@taskhub/entities'
 import { RabbitMqConsumer } from './rabbitmq.consumer.ts'
 import { dataSourceOptions } from './data-source.ts'
+import { HealthModule } from './health/health.module.ts'
 
 @Module({
     imports: [
@@ -16,9 +17,10 @@ import { dataSourceOptions } from './data-source.ts'
         JwtModule.register({
             secret: process.env.JWT_SECRET || 'secret',
             signOptions: { expiresIn: '30m' }
-        })
+        }),
+        HealthModule
     ],
     controllers: [AuthController, RabbitMqConsumer],
     providers: [AuthService, LocalStrategy, JwtStrategy]
 })
-export class AuthModule { }
+export class AuthModule {}
