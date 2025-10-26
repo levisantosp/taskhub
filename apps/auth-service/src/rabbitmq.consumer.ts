@@ -16,7 +16,7 @@ export class RabbitMqConsumer {
         }
         
         catch(error) {
-            return { ok: true, error }
+            return { ok: false, error }
         }
     }
 
