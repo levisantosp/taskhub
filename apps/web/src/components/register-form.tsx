@@ -9,8 +9,14 @@ import { useAuth } from '../context/auth-context.tsx'
 
 const registerSchema = z.object({
     email: z.email('Invalid email!'),
-    password: z.string().min(6, 'Password must have at least 6 characters'),
-    username: z.string().min(3, 'Username must have at least 3 characters'),
+    password: z.string()
+        .min(6, 'Password must have at least 6 characters')
+        .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .regex(/\d/, 'Password must contain at least one number'),
+    username: z.string()
+        .min(3, 'Username must have at least 3 characters')
+        .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers and underscores'),
     confirmPassword: z.string()
 })
     .refine(data => data.password === data.confirmPassword, {
